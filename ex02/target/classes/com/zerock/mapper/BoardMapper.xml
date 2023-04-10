@@ -12,12 +12,14 @@
 	]]>
 	</select>
 
-	<!-- 단순히  -->
+	<!-- 단순히 시퀀스 다음값을 구해 insert, 추가된 데이터의 pk값은 알 수 없지만
+		한 번의 sql 처리만으로 작업 완료   -->
 	<insert id="insert">
 		insert into tbl_board (bno, title, content, writer)
 		values (seq_board.nextval, #{title}, #{content}, #{writer})
 	</insert>
 	
+	<!-- @SelectKey는 주로 pk 값을 미리 sql을 통해 처리해두고 특정한 이름으로 결과를 보관하는 방식 -->
 	<insert id="insertSelectKey">
 		<selectKey keyProperty="bno" order="BEFORE" resultType="long">
 			select seq_board.nextval from dual
@@ -26,6 +28,46 @@
 		values (#{bno}, #{title}, #{content}, #{writer})
 	</insert>
 
+
+	<select id="read" resultType="com.zerock.domain.BoardVO">
+		select * from tbl_board
+		where bno = #{bno}
+	</select>
+	
+	<delete id="delete">
+		delete from tbl_board
+		where bno = #{bno} 
+	</delete>
+	
+	
+	<update id="update">
+		update tbl_board
+		set 
+		title=#{title},
+		content=#{content},
+		writer=#{writer},
+		updateDate = sysdate
+		where bno = #{bno}
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 
