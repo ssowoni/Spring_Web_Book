@@ -33,6 +33,12 @@ public class BoardController {
 		
 	}
 	
+	@GetMapping("/register")
+	public void register() {
+		
+	}
+	
+	
 	@PostMapping("/register")
 	public String register(@ModelAttribute BoardVO board, RedirectAttributes rttr) {
 		log.info("==========register : " + board);
