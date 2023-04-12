@@ -4,6 +4,28 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>    
 <%@include file="../includes/header.jsp" %>
 
+<script>
+	$(document).ready(function(){
+		
+		var operForm = $("#operForm");
+		
+		
+		$("button[data-oper='modify']").on("click",function(e){
+			operForm.attr("action", "/board/modify").submit();
+		});
+		
+		$("button[data-oper='list']").on("click",function(e){
+			operForm.find("#bno").remove();
+			operForm.attr("action", "/board/list");
+			operForm.submit();
+		});
+		
+		
+		
+		
+		
+	})
+</script>
 
             <div class="row">
                 <div class="col-lg-12">
@@ -41,10 +63,16 @@
                        			<input class="form-control" name='writer'
                        			value='<c:out value="${board.writer}"/>' readonly="readonly">
                        		</div>
-                       		<button data-oper='modify' class="btn btn-default" 
+<%--                        		<button data-oper='modify' class="btn btn-default" 
                        			 onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
                        		<button data-oper='list' class="btn btn-default"
-                       			onclick="location.href='/board/list'">List</button>
+                       			onclick="location.href='/board/list'">List</button> --%>
+                       			
+                       		<button data-oper='modify' class="btn btn-default">Modify</button>
+                       		<button data-oper='list' class="btn btn-default">List</button>
+                       		<form id="operForm" action="/board/modify" method="get">
+                       			<input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno }"/>'>
+                       		</form>
                        	
                         	
                             

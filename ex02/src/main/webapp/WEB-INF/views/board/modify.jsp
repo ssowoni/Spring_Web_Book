@@ -7,16 +7,46 @@
 
 <script>
 	$(document).ready(function(){
+		
+		//form이라는 태그 가져오기 
 		var formObj = $("form");
+		
+		//$("button[name='modify']").click(function ()
+		//버튼 태그를 눌렀을 때 아래 js 실행. 
+		
+		//이벤트가 발생하면 이벤트 객체가 생성되고 그 이벤트 객체가 e라는 매개변수에 할당이 된다.
+		//따라서 e를 적지 않으면 아래 operation 변수에 값이 할당되지 않는 것. 
+		$('button').on("click",function(e){
+			
+			//<form> 태그의 모든 버튼이 기본적으로 submit으로 처리하기 때문에
+			//↓ 없을 경우 submit 됨과 동시에 창이 다시 실행됨
+			e.preventDefault();
+			
+			var operation = $(this).data("oper");
+			console.log(operation);
+			
+		
+		  if(operation === 'remove'){
+			  //선택한 요소에 속성을 추가한다.
+		      formObj.attr("action", "/board/remove");	
+			}else if(operation ==='list'){
+				/* self.location = "/board/list";
+				return; */
+				formObj.attr("action", "/board/list").attr("method","get");
+				formObj.empty();
+			}
+			
+			formObj.submit();
+		});
 		
 		
 	});
 	
+	 
+
 	
 	
 </script>
-
-
 
 
 
@@ -35,6 +65,7 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
+                        	<form role="form" action="/board/modify" method="post">
                        		<div class="form-group">
                        			<label>Bno</label>
                        			<input class="form-control" name='bno'
@@ -66,11 +97,12 @@
                        			<input class="form-control" name='updateDate'
                        			value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.updateDate}"/>' readonly="readonly">
                        		</div>
+                       		<!-- data- 로 시작하는 속성을 임의로 만들 수 있다.
+                       			여기선 data-oper로 만들어두고 js에서 var operation = $(this).data("oper"); 이런식으로 사용.  -->
                        		<button type='submit' data-oper='modify' class="btn btn-default">Modify</button>
                        		<button type='submit' data-oper='remove' class="btn btn-default">Remove</button>
-                       		<button data-oper='list' class="btn btn-default"
-                       			onclick="location.href='/board/list'">List</button>
-                       	
+                       		<button data-oper='list' class="btn btn-default">List</button>
+                       		</form>
                         </div>
                         <!-- /.panel-body -->
                     </div>
