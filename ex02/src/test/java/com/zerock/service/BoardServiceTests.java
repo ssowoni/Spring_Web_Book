@@ -1,6 +1,7 @@
 package com.zerock.service;
 
 import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.zerock.domain.BoardVO;
+import com.zerock.domain.Criteria;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -43,7 +45,8 @@ public class BoardServiceTests {
 	@Test
 	public void testGetList() {
 		//collection.forEach(변수 -> 반복처리(변수))
-		service.getList().forEach(board->log.info(board));
+		
+		service.getList(new Criteria(2,10)).forEach(board->log.info(board));
 	}
 	
 	@Test

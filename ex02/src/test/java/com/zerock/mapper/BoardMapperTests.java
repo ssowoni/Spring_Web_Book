@@ -31,6 +31,15 @@ public class BoardMapperTests {
 		mapper.getListWithPaging(cri).forEach(board -> log.info(board));
 	}
 	
+	@Test
+	public void testPaging() {
+		
+		Criteria cri = new Criteria(3,10);
+		/*
+		 * Criteria cri = new Criteria(); cri.setPageNum(3); cri.setAmount(10);
+		 */mapper.getListWithPaging(cri).forEach(board -> log.info(board));
+	}
+	
 	
 	
 	@Test
@@ -90,16 +99,6 @@ public class BoardMapperTests {
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

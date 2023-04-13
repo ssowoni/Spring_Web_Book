@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zerock.domain.BoardVO;
+import com.zerock.domain.Criteria;
 import com.zerock.service.BoardService;
 
 import lombok.AllArgsConstructor;
@@ -25,10 +26,15 @@ public class BoardController {
 
 	private BoardService service;
 	
+	//Criteria 클래스를 하나 만들어두면 아래와 같이 하나의 타입만으로 파라미터나 리턴 타입을 사용할 수 있음.
+	//만약 Criteria를 클래스로 만들지 않는다면? 
+	//@RequestParam Map<String, Object> paramMap 이런식으로 paramMap으로 가져와서 사용해야됨
+	//아니면 따로 각각의 값을 받아올 수도 있고 
 	@GetMapping("/list")
-	public void list(Model model) {
+	public void list(Model model, @ModelAttribute Criteria cri) {
 		log.info("===========list");
-		List<BoardVO> boardList = service.getList();
+		//List<BoardVO> boardList = service.getList();
+		List<BoardVO> boardList = service.getList(cri);
 		model.addAttribute("list", boardList);
 		
 	}
@@ -45,7 +51,6 @@ public class BoardController {
 		service.register(board);
 		rttr.addFlashAttribute("result", board.getBno());
 		return "redirect:/board/list";
-		
 	}
 	
 	@GetMapping({"/get", "/modify"})
@@ -72,7 +77,6 @@ public class BoardController {
 			rttr.addFlashAttribute("result", "success");
 		}
 		return "redirect:/board/list";
-		
 		
 	}
 	
