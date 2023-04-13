@@ -10,6 +10,8 @@ public interface BoardService {
 	//public List<BoardVO> getList();
 	public List<BoardVO> getList(Criteria cri);
 	
+	public int getTotalCount(Criteria cri);
+	
 	public void register(BoardVO board);
 		
 	public BoardVO get(Long bno);

@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zerock.domain.BoardVO;
 import com.zerock.domain.Criteria;
+import com.zerock.domain.PageDTO;
 import com.zerock.service.BoardService;
 
 import lombok.AllArgsConstructor;
@@ -35,9 +36,13 @@ public class BoardController {
 		log.info("===========list");
 		//List<BoardVO> boardList = service.getList();
 		List<BoardVO> boardList = service.getList(cri);
+		int totalCount = service.getTotalCount(cri);
 		model.addAttribute("list", boardList);
+		model.addAttribute("pageMaker", new PageDTO(cri, totalCount));
 		
 	}
+	
+	
 	
 	@GetMapping("/register")
 	public void register() {
@@ -54,7 +59,8 @@ public class BoardController {
 	}
 	
 	@GetMapping({"/get", "/modify"})
-	public void get(@RequestParam("bno") Long bno, Model model) {
+	//@ModelAttribute는 자동으로 Model에 데이터를 지정한 이름으로 담아준다. 
+	public void get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
 		log.info("==========get : " + bno);
 		BoardVO board = service.get(bno);
 		model.addAttribute("board", board);
@@ -62,20 +68,28 @@ public class BoardController {
 	
 	
 	@PostMapping("/modify")
-	public String modify(@ModelAttribute BoardVO board, RedirectAttributes rttr) {
+	public String modify(@ModelAttribute BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		log.info("==========modify : " + board);
 		if(service.modify(board)) {
 			rttr.addFlashAttribute("result", "success");
 		}
+		rttr.addAttribute("pageNum",cri.getPageNum() );
+		rttr.addAttribute("amount",cri.getAmount() );
 		return "redirect:/board/list";
 	}
 	
 	@PostMapping("/remove")
-	public String remove(@RequestParam("bno") Long bno, RedirectAttributes rttr) {
+	public String remove(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri,  RedirectAttributes rttr) {
 		log.info("==========remove : " + bno);
 		if(service.remove(bno)) {
 			rttr.addFlashAttribute("result", "success");
 		}
+		//addAttribute는 URL에 붙어서 전달되어 값이 유지가 되지만 
+		//addFlashAttribute는 일회성으로 URL에 붙지 않고 세션 후 재지정 요청이 들어오면 값은 사라지게 됩니다.
+
+
+		rttr.addAttribute("pageNum",cri.getPageNum() );
+		rttr.addAttribute("amount",cri.getAmount() );
 		return "redirect:/board/list";
 		
 	}

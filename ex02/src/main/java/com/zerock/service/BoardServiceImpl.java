@@ -33,6 +33,9 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.getListWithPaging(cri);
 	}
 
+	
+	
+	
 	@Override
 	public void register(BoardVO board) {
 
@@ -58,6 +61,14 @@ public class BoardServiceImpl implements BoardService {
 	public boolean modify(BoardVO board) {
 		log.info("modify....." + board);
 		return mapper.update(board) == 1;
+	}
+
+
+
+
+	@Override
+	public int getTotalCount(Criteria cri) {
+		return mapper.getTotalCount(cri);
 	}
 
 }

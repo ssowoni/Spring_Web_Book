@@ -8,7 +8,8 @@
 <script>
 	$(document).ready(function(){
 		
-		//form이라는 태그 가져오기 
+		//★ form이라는 태그 가져오기 
+		//그럼 안에 있는 요소 모두가 가져오게 된다. bno, title, content, writer ....... 
 		var formObj = $("form");
 		
 		//$("button[name='modify']").click(function ()
@@ -33,7 +34,15 @@
 				/* self.location = "/board/list";
 				return; */
 				formObj.attr("action", "/board/list").attr("method","get");
+				
+				//input 태그에 name이 pageNum인 값
+				var pageNumTag = $("input[name='pageNum']").clone();
+				var amountTag = $("input[name='amount']").clone();
+				
 				formObj.empty();
+				formObj.append(pageNumTag);
+				formObj.append(amountTag);
+				
 			}
 			
 			formObj.submit();
@@ -66,6 +75,9 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                         	<form role="form" action="/board/modify" method="post">
+                        	<input type='hidden' name='pageNum' value='${cri.pageNum}'>
+							<input type='hidden' name='amount' value='${cri.amount}'>
+                        	
                        		<div class="form-group">
                        			<label>Bno</label>
                        			<input class="form-control" name='bno'
@@ -102,6 +114,8 @@
                        		<button type='submit' data-oper='modify' class="btn btn-default">Modify</button>
                        		<button type='submit' data-oper='remove' class="btn btn-default">Remove</button>
                        		<button data-oper='list' class="btn btn-default">List</button>
+                       		
+                       		
                        		</form>
                         </div>
                         <!-- /.panel-body -->
