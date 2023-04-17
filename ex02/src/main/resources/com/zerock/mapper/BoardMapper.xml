@@ -12,6 +12,37 @@
 	]]>
 	</select>
 	
+	
+	<!-- <sql> 태그는 sql의 일부를 별도로 보관하고, 필요한 경우 include 시키는 형태로 사용할 수 있다.  -->
+	<sql id="criteria">
+	
+		<!-- item : 전달받은 인자 값을 alias 명으로 대체
+			collection : 전달받은 인자. List or Array 형태만 가능
+			index : 반복되는 구문 번호 0부터 순차적으로 증가  -->		
+		<trim prefix="(" suffix=") AND" prefixOverrides ="OR" >
+			<!-- mybatis는 원하는 속성 찾을 때 getTypeArr()과 같이 이름에 기반을 두어 검색함. -->
+			<foreach item='type' collection="typeArr" >
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							title like '%' || #{keyword} || '%'
+						</when>
+						<when test="type == 'C'.toString()">
+							content like '%' || #{keyword} || '%'
+						</when>
+						<when test="type == 'W'.toString()">
+							writer like '%' || #{keyword} || '%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	
+	</sql>
+	
+	
+	
+	
 	<select id="getListWithPaging" resultType="com.zerock.domain.BoardVO">
 	<![CDATA[
 		select bno, title, content, writer, regdate, updatedate
@@ -19,14 +50,26 @@
 			(
 				select /*+ INDEX_DESC(tbl_board pk_board ) */ 
 				rownum rn, bno, title,content ,writer, regdate, updatedate 
-				from tbl_board where rownum<= #{pageNum} * #{amount}
+				from tbl_board where 
+	]]>	
+	
+	<include refid="criteria"></include>
+	
+				
+				
+	<![CDATA[			
+				rownum<= #{pageNum} * #{amount}
 
 			)where rn >(#{pageNum} -1 ) * #{amount}
 	]]>
 	</select>
 	
+	
+	
 	<select id="getTotalCount" resultType="int">
-		select count(*) from tbl_board where bno > 0
+		select count(*) from tbl_board where 
+		<include refid="criteria"></include>
+		bno > 0
 	</select>
 	
 	
@@ -74,21 +117,6 @@
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 
 
 
